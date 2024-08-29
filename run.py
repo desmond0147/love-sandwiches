@@ -30,7 +30,7 @@ def get_sales_data():
             # Convert to integer list after validation
             sales_data = [int(value) for value in sales_data]
             print("Data is valid:", sales_data)
-            break
+            return sales_data  # Return the validated sales data
 
 def validate_data(values):
     """
@@ -52,7 +52,18 @@ def validate_data(values):
     except ValueError as e:
         # Catch the ValueError and print the error message
         print(f"Invalid data: {e}, please try again.\n")
-        return False  # Return False if data is invalid
+        return False
+
+def update_sales_worksheet(data):
+    """
+    Update sales worksheet, add new row with the list data provided.
+    """
+    print("Updating sales worksheet...\n")
+    sale_worksheet = SHEET.worksheet("sales")
+    sale_worksheet.append_row(data)
+    print("Sales worksheet updated successfully.\n")
 
 # Run the function to test
-get_sales_data()
+sales_data = get_sales_data()  # Get the validated sales data
+update_sales_worksheet(sales_data)  # Update the worksheet with the sales data
+
