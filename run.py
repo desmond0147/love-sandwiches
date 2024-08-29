@@ -15,35 +15,44 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
 def get_sales_data():
-    """Get sales figures input from user."""
-    print("Please enter sales data from the last market.")
-    print("Data should be six numbers, separated by commas.")
-    print("Example: 10, 20, 30, 40, 50, 60\n")
+    """Get sales figures input from user and validate them."""
+    while True:
+        print("Please enter sales data from the last market.")
+        print("Data should be six numbers, separated by commas.")
+        print("Example: 10, 20, 30, 40, 50, 60\n")
 
-    # Collect data from user input
-    data_str = input("Enter your data here: ")
-    sales_data = data_str.split(",")
+        # Collect data from user input
+        data_str = input("Enter your data here: ")
+        sales_data = data_str.split(",")
 
-    # Validate the collected sales data
-    validate_data(sales_data)
+        # Validate the collected sales data
+        if validate_data(sales_data):
+            # Convert to integer list after validation
+            sales_data = [int(value) for value in sales_data]
+            print("Data is valid:", sales_data)
+            break
 
 def validate_data(values):
     """
     Converts all string values into integers.
     Raises ValueError if strings cannot be converted into integers or if there aren't exactly 6 values.
+    Returns True if data is valid, otherwise False.
     """
     try:
         # Check if the number of values is exactly 6
         if len(values) != 6:
             raise ValueError(f"Exactly 6 values required, you provided {len(values)}")
-        
-        # Convert the values to integers
-        int_values = [int(value) for value in values]
-        print("Data is valid:", int_values)
-        
+
+        # Attempt to convert each value to an integer to ensure they are valid numbers
+        [int(value) for value in values]
+
+        # If everything passes, return True
+        return True
+
     except ValueError as e:
         # Catch the ValueError and print the error message
-        print(f"Invalid data: {e}")
+        print(f"Invalid data: {e}, please try again.\n")
+        return False  # Return False if data is invalid
 
 # Run the function to test
 get_sales_data()
