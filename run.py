@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from pprint import pprint
 
 # Define the scopes required for the Google Sheets and Drive APIs
 SCOPE = [
@@ -58,12 +59,35 @@ def update_sales_worksheet(data):
     """
     Update sales worksheet, add new row with the list data provided.
     """
-    print("Updating sales worksheet...\n")
-    sale_worksheet = SHEET.worksheet("sales")
-    sale_worksheet.append_row(data)
-    print("Sales worksheet updated successfully.\n")
+    try:
+        print("Updating sales worksheet...\n")
+        sales_worksheet = SHEET.worksheet("sales")  # Ensure correct worksheet access
+        sales_worksheet.append_row(data)  # Append the row with the provided data
+        print("Sales worksheet updated successfully.\n")
+    except Exception as e:
+        print(f"Failed to update the sales worksheet: {e}")
 
-# Run the function to test
-sales_data = get_sales_data()  # Get the validated sales data
-update_sales_worksheet(sales_data)  # Update the worksheet with the sales data
+def calculate_surplus_data(sales_row):
+    """
+    Compare sales with stock and calculate the surplus for each item type.
+
+    The surplus is defined as sales figure subtracted from stock:
+    - Positive surplus indicates waste.
+    - Negative surplus indicates extra made when stock was sold out.
+    """
+    print("Calculating surplus data...\n")
+    stock = SHEET.worksheet("stock").get_all_values()  
+    stock_row =stock[-1]
+    print(stock_row)  
+
+def main():
+    """
+    Run all program functions.
+    """
+    sales_data = get_sales_data()  # Get sales data from user input
+    update_sales_worksheet(sales_data)  # Update the sales worksheet
+    calculate_surplus_data(sales_data)  # Currently, this function only prints stock data
+
+print("Welcome to Love Sandwiches Automation")
+main()
 
