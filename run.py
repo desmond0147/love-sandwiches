@@ -67,6 +67,15 @@ def update_sales_worksheet(data):
     except Exception as e:
         print(f"Failed to update the sales worksheet: {e}")
 
+def update_surplus_worksheet(data):
+    """
+    update surplus worksheet, add new row with the list calculated.
+    """
+    print("updatin surplus worksheet...\n")
+    surplus_worksheet = SHEET.worksheet("surplus") 
+    surplus_worksheet.append_row(data)
+    print("surplus worksheet update successfully. \n")
+
 def calculate_surplus_data(sales_row):
     """
     Compare sales with stock and calculate the surplus for each item type.
@@ -84,16 +93,18 @@ def calculate_surplus_data(sales_row):
         surplus = int(stock) - sales
         surplus_data.append(surplus)
 
-    return surplus_data 
+    return surplus_data
+
 
 def main():
     """
     Run all program functions.
     """
-    sales_data = get_sales_data()  # Get sales data from user input
+    data = get_sales_data()
+    sales_data = [int(num) for num in data]  # Get sales data from user input
     update_sales_worksheet(sales_data)  # Update the sales worksheet
     new_surplus_data = calculate_surplus_data(sales_data)
-    print(new_surplus_data)  # Currently, this function only prints stock data
+    update_surplus_worksheet(new_surplus_data)
 
 print("Welcome to Love Sandwiches Automation")
 main()
