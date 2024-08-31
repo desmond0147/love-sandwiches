@@ -1,6 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
-from pprint import pprint
+
 
 # Define the scopes required for the Google Sheets and Drive APIs
 SCOPE = [
@@ -23,7 +23,7 @@ def get_sales_data():
         print("Example: 10, 20, 30, 40, 50, 60\n")
 
         # Collect data from user input
-        data_str = input("Enter your data here: ")
+        data_str = input("Enter your data here:\n")
         sales_data = data_str.split(",")
 
         # Validate the collected sales data
